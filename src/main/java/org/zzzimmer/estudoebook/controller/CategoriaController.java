@@ -34,4 +34,10 @@ public class CategoriaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/categorias/descricao/{desc}")
+    public ResponseEntity<List<Categoria>> findByDescricao(@PathVariable String desc){
+        List<Categoria> listDescricao = categoriaRepository.findByDescricao(desc);
+        return ResponseEntity.ok(listDescricao);
+    }
 }
