@@ -9,6 +9,7 @@ import org.zzzimmer.estudoebook.repository.CategoriaRepository;
 import org.zzzimmer.estudoebook.repository.ProdutoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProdutoController {
@@ -35,9 +36,9 @@ public class ProdutoController {
     public ResponseEntity<Produto> create(@RequestBody Produto payload){
         Produto produto = (produtoRepository.save(payload));
 
-        Categoria categoria = categoriaRepository.getReferenceById(
+        Optional<Categoria> categoria = categoriaRepository.findById(
                 payload.getCategoria().getId());
-        produto.setCategoria(categoria);
+        produto.setCategoria(categoria.get());
         return ResponseEntity.ok(produto);
     }
 }
