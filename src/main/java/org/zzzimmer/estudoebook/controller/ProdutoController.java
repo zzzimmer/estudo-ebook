@@ -41,4 +41,28 @@ public class ProdutoController {
         produto.setCategoria(categoria.get());
         return ResponseEntity.ok(produto);
     }
+
+    @PutMapping("/produtos/{id}")
+    public ResponseEntity<Produto> atualizar(
+            @PathVariable Integer id, @RequestBody Produto produto){
+
+        if (!produtoRepository.existsById(id)){
+            ResponseEntity.notFound().build();
+        }
+        produto.setId(id);
+        Produto entidadeAtualizada = produtoRepository.save(produto);
+        return ResponseEntity.ok(entidadeAtualizada);
+    }
+
+    @DeleteMapping("/produtos/{id}")
+    public ResponseEntity<Void> delete (@PathVariable Integer id){
+
+        if (!produtoRepository.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        produtoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
