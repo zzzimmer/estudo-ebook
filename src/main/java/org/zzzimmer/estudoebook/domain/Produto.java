@@ -19,7 +19,7 @@ public class Produto {
     private BigDecimal preco;
 
     @ManyToOne
-    @JsonIgnoreProperties("produtos")
+    @JsonIgnoreProperties("produtos") //ao "entrar" no objeto, ignora determinada propriedade
     private Fornecedor fornecedor;
 
     @ManyToOne
@@ -75,13 +75,5 @@ public class Produto {
     @Override
     public int hashCode() {
         return Objects.hash(id, nome, descricao, preco, categoria);
-    }
-
-    public Fornecedor getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(Fornecedor fornecedor) {
-        this.fornecedor = fornecedor;
     }
 }
