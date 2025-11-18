@@ -13,8 +13,8 @@ public class EstudoEbookApplication {
     }
 
 
-//    @Bean
-//    public static FlywayMigrationStrategy cleanMigrateStrategy() {
-//        return flyway -> { flyway.repair(); flyway.migrate();
-//        }; }
+    @Bean
+    public static FlywayMigrationStrategy cleanMigrateStrategy() {
+        return flyway -> { flyway.repair(); flyway.migrate();
+        }; }
 }

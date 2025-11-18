@@ -76,4 +76,12 @@ public class Produto {
     public int hashCode() {
         return Objects.hash(id, nome, descricao, preco, categoria);
     }
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
 }
