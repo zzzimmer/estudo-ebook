@@ -2,6 +2,7 @@ package org.zzzimmer.estudoebook.domain;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class Produto {
     private BigDecimal preco;
 
     @ManyToOne
+    @JsonIgnoreProperties("produtos")
     private Fornecedor fornecedor;
 
     @ManyToOne

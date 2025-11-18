@@ -1,5 +1,6 @@
 package org.zzzimmer.estudoebook.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,7 +14,8 @@ public class Fornecedor {
     private String email;
     private String fone;
 
-    @OneToMany
+    @OneToMany(mappedBy = "fornecedor")
+    @JsonIgnoreProperties("fornecedor")
     private List<Produto> produtos;
 
     public Integer getId() {
