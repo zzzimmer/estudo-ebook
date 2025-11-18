@@ -18,6 +18,9 @@ public class Produto {
     private BigDecimal preco;
 
     @ManyToOne
+    private Fornecedor fornecedor;
+
+    @ManyToOne
     private Categoria categoria;
 
     public Integer getId() {
@@ -70,5 +73,13 @@ public class Produto {
     @Override
     public int hashCode() {
         return Objects.hash(id, nome, descricao, preco, categoria);
+    }
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
     }
 }
