@@ -1,11 +1,14 @@
 package org.zzzimmer.estudoebook.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.zzzimmer.estudoebook.domain.Categoria;
+import org.zzzimmer.estudoebook.domain.Fornecedor;
 import org.zzzimmer.estudoebook.domain.Produto;
 import org.zzzimmer.estudoebook.repository.CategoriaRepository;
+import org.zzzimmer.estudoebook.repository.FornecedorRepository;
 import org.zzzimmer.estudoebook.repository.ProdutoRepository;
 
 import java.util.List;
@@ -20,6 +23,9 @@ public class ProdutoController {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private FornecedorRepository fornecedorRepository;
+
     @GetMapping("/produtos")
     public List<Produto> listar(){
         return produtoRepository.findAll();
@@ -33,12 +39,18 @@ public class ProdutoController {
 
 
     @PostMapping("/produtos")
+    @ResponseStatus(HttpStatus.CREATED)//retorna codigo 201
     public ResponseEntity<Produto> create(@RequestBody Produto payload){
         Produto produto = (produtoRepository.save(payload));
 
         Optional<Categoria> categoria = categoriaRepository.findById(
                 payload.getCategoria().getId());
         produto.setCategoria(categoria.get());
+
+        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(
+                payload.getFornecedor().getId());
+        produto.setFornecedor(fornecedor.get());
+
         return ResponseEntity.ok(produto);
     }
 
