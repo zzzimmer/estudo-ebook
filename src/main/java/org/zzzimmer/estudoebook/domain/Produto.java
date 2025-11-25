@@ -25,6 +25,19 @@ public class Produto {
     @ManyToOne
     private Categoria categoria;
 
+    @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private Estoque estoque;
+
+    public Produto(){
+        this.estoque = new Estoque();
+        this.estoque.setProduto(this);
+    }
+
+    public Estoque getEstoque(){
+        return estoque;
+    }
+
     public Integer getId() {
         return id;
     }
