@@ -1,5 +1,6 @@
 package org.zzzimmer.estudoebook.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,7 +8,7 @@ public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     private int quantidade;
     @Column(name = "qtd_max")
     private int quantidadeMaxima;
@@ -19,18 +20,15 @@ public class Estoque {
     private ESituacao situacao = ESituacao.ATIVO;
 
     @OneToOne
-    @MapsId // garante que o id do estoque seja igual o id do produto
+    @MapsId // garante que o id do estoque seja igual o id do produto. Strong Ownership
     @JoinColumn(name = "produto_id")
+    @JsonIgnoreProperties("estoque")
     private Produto produto;
 
     //associa o produto a um determinado estoque
     public void setProduto(Produto produto) {
         this.produto = produto;
     }
-
-//    public Produto getProduto() {
-//        return produto;
-//    }
 
     public void repor (int quantidade) throws Exception {
         if (this.situacao != ESituacao.ATIVO){
@@ -76,5 +74,21 @@ public class Estoque {
 
     public void setQuantidadeMinima(Integer quantidade_minima) {
         this.quantidadeMinima = quantidade_minima;
+    }
+
+    public ESituacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(ESituacao situacao) {
+        this.situacao = situacao;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
