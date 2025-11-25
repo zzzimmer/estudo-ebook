@@ -41,7 +41,7 @@ public class Estoque {
         this.quantidade+=quantidade;
     }
 
-    public void retirada(int quantidade) throws Exception{
+    public void retirar(int quantidade) throws Exception{
         if (this.situacao != ESituacao.ATIVO){
             throw new Exception("O Estoque está inativo ou bloqueado." +
                     "Retirada não autorizada");
