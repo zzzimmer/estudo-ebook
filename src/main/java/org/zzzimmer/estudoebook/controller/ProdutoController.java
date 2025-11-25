@@ -27,12 +27,12 @@ public class ProdutoController {
     private FornecedorRepository fornecedorRepository;
 
     @GetMapping("/produtos")
-    public List<Produto> listar(){
+    public List<Produto> listar() {
         return produtoRepository.findAll();
     }
 
     @GetMapping("/produtos/{id}")
-    public ResponseEntity<Produto> GetById(@PathVariable Integer id){
+    public ResponseEntity<Produto> GetById(@PathVariable Integer id) {
         return produtoRepository.findById(id).map(ResponseEntity::ok).
                 orElse(ResponseEntity.notFound().build());
     }
@@ -40,7 +40,7 @@ public class ProdutoController {
 
     @PostMapping("/produtos")
     @ResponseStatus(HttpStatus.CREATED)//retorna codigo 201
-    public ResponseEntity<Produto> create(@RequestBody Produto payload){
+    public ResponseEntity<Produto> create(@RequestBody Produto payload) {
         Produto produto = (produtoRepository.save(payload));
 
         Optional<Categoria> categoria = categoriaRepository.findById(
@@ -56,9 +56,9 @@ public class ProdutoController {
 
     @PutMapping("/produtos/{id}")
     public ResponseEntity<Produto> atualizar(
-            @PathVariable Integer id, @RequestBody Produto produto){
+            @PathVariable Integer id, @RequestBody Produto produto) {
 
-        if (!produtoRepository.existsById(id)){
+        if (!produtoRepository.existsById(id)) {
             ResponseEntity.notFound().build();
         }
         produto.setId(id);
@@ -67,13 +67,40 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/produtos/{id}")
-    public ResponseEntity<Void> delete (@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
-        if (!produtoRepository.existsById(id)){
+        if (!produtoRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         produtoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/produtos/{id}/repor")
+    public ResponseEntity<Produto> reporEstoque(@PathVariable int id,
+                                                @RequestParam int quantidade) throws Exception {
+        if (!produtoRepository.existsById(id)) {
+            ResponseEntity.notFound().build();
+        }
+        Produto produto = produtoRepository.findById(id).orElseThrow();
+        produto.getEstoque().repor(quantidade);
+        produtoRepository.save(produto);
+
+        return ResponseEntity.ok(produto);
+
+    }
+
+    @PutMapping("produtos/{id}/retirar")
+    public ResponseEntity<Produto> retirarEstoque(@PathVariable int id,
+                                                  @RequestParam int quantidade) throws Exception {
+        if (!produtoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        Produto produto = produtoRepository.findById(id).orElseThrow();
+        produto.getEstoque().retirar(quantidade);
+        produtoRepository.save(produto);
+
+        return ResponseEntity.ok(produto);
     }
 
 
