@@ -2,13 +2,21 @@ package org.zzzimmer.estudoebook.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
+    @Getter // implementar somente getter para preservar a integridade
     private int quantidade;
     @Column(name = "qtd_max")
     private int quantidadeMaxima;
@@ -24,11 +32,6 @@ public class Estoque {
     @JoinColumn(name = "produto_id")
     @JsonIgnoreProperties("estoque")
     private Produto produto;
-
-    //associa o produto a um determinado estoque
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
 
     public void repor (int quantidade) throws Exception {
         if (this.situacao != ESituacao.ATIVO){
@@ -50,45 +53,5 @@ public class Estoque {
             throw new Exception("Quantidade de retirada não autorizada.");
         }
         this.quantidade-=quantidade;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public Integer getQuantidadeMaxima() {
-        return quantidadeMaxima;
-    }
-
-    public void setQuantidadeMaxima(Integer quantidade_maxima) {
-        this.quantidadeMaxima = quantidade_maxima;
-    }
-
-    public Integer getQuantidadeMinima() {
-        return quantidadeMinima;
-    }
-
-    public void setQuantidadeMinima(Integer quantidade_minima) {
-        this.quantidadeMinima = quantidade_minima;
-    }
-
-    public ESituacao getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(ESituacao situacao) {
-        this.situacao = situacao;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }
