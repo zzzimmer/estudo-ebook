@@ -10,30 +10,31 @@ import org.zzzimmer.estudoebook.repository.FornecedorRepository;
 import java.util.List;
 
 @RestController
+@RequestMapping("/fornecedores")
 public class FornecedorController {
 
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
-    @GetMapping("/fornecedores")
+    @GetMapping
     public List<Fornecedor> listar (){
         return fornecedorRepository.findAll();
     }
 
-    @GetMapping("/fornecedores/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Fornecedor> findById(@PathVariable Integer id){
         return fornecedorRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/fornecedores")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Fornecedor> create(@RequestBody Fornecedor fornecedor){
         return ResponseEntity.ok(fornecedorRepository.save(fornecedor));
     }
 
-    @PutMapping("/fornecedores/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Fornecedor> update(
             @PathVariable Integer id
             ,@RequestBody Fornecedor fornecedor){
@@ -45,7 +46,7 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorRepository.save(fornecedor));
     }
 
-    @DeleteMapping("/fornecedores/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         if (!fornecedorRepository.existsById(id)){
             return ResponseEntity.notFound().build();

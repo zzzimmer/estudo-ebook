@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/produtos")
 public class ProdutoController {
 
     @Autowired
@@ -26,19 +27,19 @@ public class ProdutoController {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
-    @GetMapping("/produtos")
+    @GetMapping
     public List<Produto> listar() {
         return produtoRepository.findAll();
     }
 
-    @GetMapping("/produtos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Produto> GetById(@PathVariable Integer id) {
         return produtoRepository.findById(id).map(ResponseEntity::ok).
                 orElse(ResponseEntity.notFound().build());
     }
 
 
-    @PostMapping("/produtos")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)//retorna codigo 201
     public ResponseEntity<Produto> create(@RequestBody Produto payload) {
         Produto produto = (produtoRepository.save(payload));
@@ -54,7 +55,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produto);
     }
 
-    @PutMapping("/produtos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizar(
             @PathVariable Integer id, @RequestBody Produto produto) {
 
@@ -66,7 +67,7 @@ public class ProdutoController {
         return ResponseEntity.ok(entidadeAtualizada);
     }
 
-    @DeleteMapping("/produtos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         if (!produtoRepository.existsById(id)) {
@@ -76,7 +77,7 @@ public class ProdutoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/produtos/{id}/repor")
+    @PutMapping("/{id}/repor")
     public ResponseEntity<Produto> reporEstoque(@PathVariable int id,
                                                 @RequestParam int quantidade) throws Exception {
         if (!produtoRepository.existsById(id)) {
@@ -90,7 +91,7 @@ public class ProdutoController {
 
     }
 
-    @PutMapping("produtos/{id}/retirar")
+    @PutMapping("/{id}/retirar")
     public ResponseEntity<Produto> retirarEstoque(@PathVariable int id,
                                                   @RequestParam int quantidade) throws Exception {
         if (!produtoRepository.existsById(id)) {

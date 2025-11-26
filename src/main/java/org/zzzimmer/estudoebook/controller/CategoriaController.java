@@ -13,18 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/categorias")
 public class CategoriaController {
 
     @Autowired
     CategoriaRepository categoriaRepository;
 
-    @GetMapping("/categorias")
+    @GetMapping
     public List<Categoria> listar(){
         //metodo provido pela SDJPA
         return categoriaRepository.findAll();
     }
 
-    @GetMapping("/categorias/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Categoria> findById(@PathVariable Integer id){
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         if (categoria.isPresent()){
@@ -33,18 +34,18 @@ public class CategoriaController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/categorias/descricao/{desc}")
+    @GetMapping("/descricao/{desc}")
     public ResponseEntity<List<Categoria>> findByDescricao(@PathVariable String desc){
         List<Categoria> listDescricao = categoriaRepository.findByDescricao(desc);
         return ResponseEntity.ok(listDescricao);
     }
 
-    @PostMapping("/categorias")
+    @PostMapping
     public Categoria create(@RequestBody Categoria categoria){
         return categoriaRepository.save(categoria);
     }
 
-    @PutMapping("/categorias/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Categoria> update(@RequestBody Categoria categoria,
                                             @PathVariable Integer id){
         if (!categoriaRepository.existsById(id)){
@@ -58,7 +59,7 @@ public class CategoriaController {
         }
     }
 
-    @DeleteMapping("/categorias/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable Integer id){
         if (!categoriaRepository.existsById(id)){
             return ResponseEntity.notFound().build();
