@@ -2,6 +2,7 @@ package org.zzzimmer.estudoebook.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
-    @Getter // implementar somente getter para preservar a integridade
+    @Setter(AccessLevel.NONE)
     private int quantidade;
     @Column(name = "qtd_max")
     private int quantidadeMaxima;

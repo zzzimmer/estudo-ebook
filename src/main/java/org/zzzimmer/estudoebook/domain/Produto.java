@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,8 @@ public class Produto {
 
     @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
-    @Getter// mantem somente a possibildiade de GET estoque. Visto a composição
+//    @Getter// mantem somente a possibildiade de GET estoque. Visto a composição
+    @Setter(AccessLevel.NONE)
     @JsonIgnoreProperties("produto")
     private Estoque estoque;
 
