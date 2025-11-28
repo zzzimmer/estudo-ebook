@@ -34,6 +34,13 @@ public class FornecedorController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Fornecedor> create(@Valid @RequestBody Fornecedor fornecedor){
 
+        boolean hasEmail = fornecedorRepository.findByEmail(fornecedor.getEmail())
+                .isPresent();
+        if (hasEmail){
+            throw new NegocioEstoqueExceptions(
+                    "Este e-mail já está cadastrado na base de dados");
+        }
+
         return ResponseEntity.ok(fornecedorRepository.save(fornecedor));
     }
 
@@ -41,6 +48,14 @@ public class FornecedorController {
     public ResponseEntity<Fornecedor> update(@PathVariable Integer id
             ,@Valid @RequestBody Fornecedor fornecedorPayload){
 
+        boolean Email = fornecedorRepository.findByEmail(fornecedorPayload.getEmail())
+                .filter(fornecedorRepositorio -> !fornecedorRepositorio.equals(fornecedorPayload))
+                .isPresent();
+
+        if (Email){
+            throw new NegocioEstoqueExceptions(
+                    "Este e-mail já está cadastrado na base de dados");
+        }
 
         if (!fornecedorRepository.existsById(id)){
             return ResponseEntity.notFound().build();
