@@ -3,6 +3,7 @@ package org.zzzimmer.estudoebook.controller;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +42,12 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public Categoria create(@RequestBody Categoria categoria){
+    public Categoria create(@Valid @RequestBody Categoria categoria){
         return categoriaRepository.save(categoria);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> update(@RequestBody Categoria categoria,
+    public ResponseEntity<Categoria> update(@Valid @RequestBody Categoria categoria,
                                             @PathVariable Integer id){
         if (!categoriaRepository.existsById(id)){
             return ResponseEntity.notFound().build();

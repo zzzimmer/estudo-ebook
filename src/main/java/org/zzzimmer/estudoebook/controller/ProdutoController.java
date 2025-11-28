@@ -1,5 +1,6 @@
 package org.zzzimmer.estudoebook.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)//retorna codigo 201
-    public ResponseEntity<Produto> create(@RequestBody Produto payload) {
+    public ResponseEntity<Produto> create(@Valid @RequestBody Produto payload) {
         Produto produto = (produtoRepository.save(payload));
 
         Optional<Categoria> categoria = categoriaRepository.findById(
@@ -57,7 +58,7 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizar(
-            @PathVariable Integer id, @RequestBody Produto produto) {
+            @PathVariable Integer id, @Valid @RequestBody Produto produto) {
 
         if (!produtoRepository.existsById(id)) {
             ResponseEntity.notFound().build();
