@@ -11,6 +11,8 @@ import org.zzzimmer.estudoebook.domain.Produto;
 import org.zzzimmer.estudoebook.repository.CategoriaRepository;
 import org.zzzimmer.estudoebook.repository.FornecedorRepository;
 import org.zzzimmer.estudoebook.repository.ProdutoRepository;
+import org.zzzimmer.estudoebook.service.CadastroProdutoService;
+import org.zzzimmer.estudoebook.service.MovimentacaoDeEstoqueService;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,12 @@ public class ProdutoController {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    private CadastroProdutoService cadastroProdutoService;
+
+    @Autowired
+    private MovimentacaoDeEstoqueService movimentacaoDeEstoqueService;
+
     @GetMapping
     public List<Produto> listar() {
         return produtoRepository.findAll();
@@ -39,69 +47,41 @@ public class ProdutoController {
                 orElse(ResponseEntity.notFound().build());
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)//retorna codigo 201
     public ResponseEntity<Produto> create(@Valid @RequestBody Produto payload) {
-        Produto produto = (produtoRepository.save(payload));
-
-        Optional<Categoria> categoria = categoriaRepository.findById(
-                payload.getCategoria().getId());
-        produto.setCategoria(categoria.get());
-
-        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(
-                payload.getFornecedor().getId());
-        produto.setFornecedor(fornecedor.get());
-
+        Produto produto = cadastroProdutoService.salvar(payload);
         return ResponseEntity.ok(produto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(
-            @PathVariable Integer id, @Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizar(@PathVariable Integer id,
+                                             @Valid @RequestBody Produto produto) {
+//        if (!cadastroProdutoService.findById(id).isPresent())
+            produto.setId(id);
+            Produto entidadeAtualizada = cadastroProdutoService.salvar(produto);
+            return ResponseEntity.ok(entidadeAtualizada);
 
-        if (!produtoRepository.existsById(id)) {
-            ResponseEntity.notFound().build();
-        }
-        produto.setId(id);
-        Produto entidadeAtualizada = produtoRepository.save(produto);
-        return ResponseEntity.ok(entidadeAtualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-
-        if (!produtoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        produtoRepository.deleteById(id);
+        cadastroProdutoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/repor")
     public ResponseEntity<Produto> reporEstoque(@PathVariable int id,
                                                 @RequestParam int quantidade) throws Exception {
-        if (!produtoRepository.existsById(id)) {
-            ResponseEntity.notFound().build();
-        }
-        Produto produto = produtoRepository.findById(id).orElseThrow();
-        produto.getEstoque().repor(quantidade);
-        produtoRepository.save(produto);
-
-        return ResponseEntity.ok(produto);
+            Produto produto = movimentacaoDeEstoqueService.repor(id, quantidade);
+            return ResponseEntity.ok(produto);
 
     }
 
     @PutMapping("/{id}/retirar")
     public ResponseEntity<Produto> retirarEstoque(@PathVariable int id,
                                                   @RequestParam int quantidade) throws Exception {
-        if (!produtoRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        Produto produto = produtoRepository.findById(id).orElseThrow();
-        produto.getEstoque().retirar(quantidade);
-        produtoRepository.save(produto);
-
+        Produto produto = movimentacaoDeEstoqueService.retirar(id, quantidade);
         return ResponseEntity.ok(produto);
     }
 
